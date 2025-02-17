@@ -1,0 +1,80 @@
+/* Example of a nice background with minimal overlay */
+.admin {
+  background-image: url("/src/assets/DALL·E\ 2025-02-16\ 11.29.06\ -\ A\ premium\ background\ for\ the\ \'Premium\ Selection\'\ section\ of\ a\ luxury\ car\ website.\ The\ design\ should\ be\ elegant\ and\ high-end\,\ featuring\ a\ row\ of\ luxury.webp");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh; /* allow the content to expand as needed */
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+  padding: 15px;
+}
+
+/* Optional: overlay to darken or lighten the background */
+.admin::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3); /* dark overlay */
+  z-index: -1; /* behind the content */
+}
+
+/* Make sure child elements appear above the overlay */
+.admin > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Table container adjustments */
+.seller-table-container {
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+/* Optional scrollable area for the table */
+.table-wrapper {
+  max-height: 60vh; /* limit the table’s height if you want */
+  overflow-y: auto; /* enable vertical scroll if table is too tall */
+}
+
+/* Adjust the form container if you want it smaller or bigger */
+.seller-form-container {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+}
+
+/* Label styling (optional) */
+label {
+  font-weight: 600;
+}
+
+/* Make sure the body has a default background color behind the overlay */
+body {
+  background-color: #f8f9fa;
+}
+
+/* Responsive tweaks if needed */
+@media (max-width: 768px) {
+  .admin {
+    padding: 10px;
+  }
+
+  .table-wrapper {
+    max-height: none; /* let it expand on smaller screens if you prefer */
+  }
+}
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
