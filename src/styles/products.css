@@ -1,0 +1,31 @@
+.bodycar {
+  background-image: url("../assets/4.webp");
+}
+.welcoming {
+  background-image: url("../assets/repo.webp");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+}
+.alert-custom > h2 {
+  font-size: 100px;
+  /* background-color: rgba(240, 248, 255, 0.705); */
+  /* 
+    height: 30%; */
+  width: 100%;
+}
+.alert-custom {
+  width: 50%;
+  height: 50%;
+  background-color: rgba(240, 248, 255, 0.705);
+}
+.prod-head {
+  background-color: rgba(255, 255, 255, 0.437);
+}
+.alert-custom  h2{
+font-size: 80px;
+}
+.cary{
+font-size: 80px;}
