@@ -20,6 +20,27 @@
       "email": "alaaEzzat@gmail.com",
       "password": "119119***",
       "role": "customer"
+    },
+    {
+      "id": "1740312867685",
+      "name": "ahah",
+      "email": "ahahah@gmail.com",
+      "password": "119119***",
+      "role": "customer"
+    },
+    {
+      "id": "1740312869155",
+      "name": "ahah",
+      "email": "ahahah@gmail.com",
+      "password": "119119***",
+      "role": "customer"
+    },
+    {
+      "id": "1740318536710",
+      "name": "adadad",
+      "email": "ewrw@gmail.com",
+      "password": "119119***",
+      "role": "customer"
     }
   ],
   "products": [

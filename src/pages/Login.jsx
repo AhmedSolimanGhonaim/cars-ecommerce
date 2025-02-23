@@ -3,9 +3,11 @@ import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setCurrentUser } from "../store";
 import { Tab, Nav } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
-import {SignUp} from "./SignUp";
-
+import { Navigate, useNavigate } from "react-router-dom";
+import { SignUp } from "./SignUp";
+import { toast } from "react-toastify";
+import { getAllUsers } from "../api/userapi"; // Import API call
+import "../styles/login.css";
 export function Login() {
   const [key, setKey] = useState("login");
   const [email, setEmail] = useState("");
@@ -13,26 +15,65 @@ export function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Redirect if already logged in
   useEffect(() => {
+    // Check if user is already logged in
     const currentUser = JSON.parse(sessionStorage.getItem("currentUser"));
     if (currentUser) {
-      navigate(currentUser.role === "admin" ? "/admin" : "/");
+      navigate(currentUser.role === "/admin" ? "admin" : "/");
     }
   }, [navigate]);
 
-  const handleLogin = (e) => {
+  useEffect(() => {
+    // Fetch users from db.json and store them in sessionStorage
+    async function fetchUsers() {
+      try {
+        const response = await getAllUsers();
+        const users = response.data;
+        sessionStorage.setItem("users", JSON.stringify(users));
+      } catch (error) {
+        console.error("Error fetching users:", error);
+        toast.error("Failed to fetch users from server.");
+      }
+    }
+
+    // Fetch users only if not already in sessionStorage
+    if (!sessionStorage.getItem("users")) {
+      fetchUsers();
+    }
+  }, []);
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(sessionStorage.getItem("users")) || [];
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
-    if (user) {
-      dispatch(setCurrentUser(user));
-      sessionStorage.setItem("currentUser", JSON.stringify(user));
-      navigate(user.role === "admin" ? "/admin" : "/");
-    } else {
-      alert("Invalid credentials");
+
+    if (!email || !password) {
+      toast.error("Please enter both email and password.");
+      return;
+    }
+
+    try {
+      const users = JSON.parse(sessionStorage.getItem("users")) || [];
+      const user = users.find(
+        (user) => user.email === email && user.password === password
+      );
+
+      if (user) {
+        dispatch(setCurrentUser(user));
+        sessionStorage.setItem("currentUser", JSON.stringify(user));
+
+        // Initialize empty cart if not present
+        if (!sessionStorage.getItem("cart")) {
+          sessionStorage.setItem("cart", JSON.stringify([]));
+        }
+        // Navigate("/");
+
+        toast.success(`Welcome back, ${user.name}!`);
+        navigate(user.role === "admin" ? "/admin" : "/");
+      } else {
+        toast.error("Invalid email or password.");
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      toast.error("An error occurred during login.");
     }
   };
 
@@ -53,12 +94,18 @@ export function Login() {
                 </Nav>
                 <Tab.Content>
                   <Tab.Pane eventKey="login">
-                    <h1 className="card-title text-center">Login</h1>
+                    <h1 className="card-title text-center text-primary">
+                      Login
+                    </h1>
                     <form onSubmit={handleLogin}>
                       <div className="mb-3">
                         <input
                           type="email"
-                          className="form-control"
+                          className="form-control in"
+                          style={{
+                            backgroundColor: "var(--bg-primary)",
+                            color: "var(--text-primary)",
+                          }}
                           placeholder="Email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
@@ -68,7 +115,11 @@ export function Login() {
                       <div className="mb-3">
                         <input
                           type="password"
-                          className="form-control"
+                          className="form-control in"
+                          style={{
+                            backgroundColor: "var(--bg-primary)",
+                            color: "var(--text-primary)",
+                          }}
                           placeholder="Password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
@@ -83,12 +134,12 @@ export function Login() {
                     </form>
                   </Tab.Pane>
                   <Tab.Pane eventKey="signup">
-                    < SignUp />
+                    <SignUp />
                   </Tab.Pane>
                 </Tab.Content>
               </Tab.Container>
             </div>
-          </div> 
+          </div>
         </div>
       </div>
     </div>

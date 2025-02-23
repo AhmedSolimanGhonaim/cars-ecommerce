@@ -73,8 +73,6 @@
 
 // export default store;
 
-
-
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
@@ -125,7 +123,8 @@ const authSlice = createSlice({
   initialState: initialState.currentUser,
   reducers: {
     setCurrentUser: (state, action) => action.payload,
-    logoutUser: () => null,
+    // logoutUser: () => null,
+    logoutUser: () => initialState.currentUser,
   },
 });
 
@@ -133,17 +132,28 @@ const cartSlice = createSlice({
   name: "cart",
   initialState: initialState.cart,
   reducers: {
-    addToCart: (state, action) => [...state, action.payload],
+    setCart: (state, action) => action.payload,
+    addToCart: (state, action) => {
+      const newItem = action.payload;
+      const existingItem = state.find((item) => item.id === newItem.id);
+      if (!existingItem) {
+        return [...state, newItem];
+      }
+      return state;
+    },
     removeFromCart: (state, action) =>
       state.filter((item) => item.id !== action.payload),
+    clearCart: () => [],
   },
 });
 
+export const { setCart, addToCart, removeFromCart, clearCart } =
+  cartSlice.actions;
 export const { setUsers, addUser, deleteUser } = userSlice.actions;
 export const { setProducts, addProduct, deleteProduct, updateProduct } =
   productSlice.actions;
 export const { setCurrentUser, logoutUser } = authSlice.actions;
-export const { addToCart, removeFromCart } = cartSlice.actions;
+// export const { addToCart, removeFromCart } = cartSlice.actions;
 
 const store = configureStore({
   reducer: {

@@ -1,0 +1,44 @@
+:root {
+  --bg-primary: #aaaaaa;
+  --text-primary: #000000;
+  --card-bg: #7a6c6c;
+  --card-border: #658cb4;
+}
+
+html.dark {
+  --bg-primary: #000000;
+  --text-primary: #ffffff;
+  --card-bg: #2d2d2d;
+  --card-border: #404040;
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card {
+  background-color: var(--card-bg);
+  border-color: var(--card-border);
+}
+
+.table {
+  color: var(--text-primary);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}
+
+.form-control {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+  border-color: var(--card-border);
+}
+
+.form-control:focus {
+  background-color: var(--card-bg);
+  color: var(--text-primary);
+}

@@ -5,3 +5,33 @@
     background-size: cover;
     min-height: 100vh;
 }
+.details {
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+}
+
+.product-info {
+  background-color:var(--bg-primary) ;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-top: 2rem;
+}
+
+.rounded-5 {
+  transition: transform 0.3s ease;
+}
+
+.rounded-5:hover {
+  transform: scale(1.02);
+}
+
+.lead {
+  border-bottom: 1px solid var( --text-primary);
+  padding-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+  img {
+    width: 100% !important;
+  }
+}
