@@ -9,6 +9,13 @@
   background-repeat: no-repeat;
   height: 100vh;
 }
+.all{
+    background-image: url("../assets/repo.webp");
+  background-attachment: fixed;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 .alert-custom > h2 {
   font-size: 100px;
   /* background-color: rgba(240, 248, 255, 0.705); */

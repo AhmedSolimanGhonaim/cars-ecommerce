@@ -1,0 +1,73 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "role": "admin",
+      "email": "admin@gmial.com",
+      "password": "admin123"
+    },
+    {
+      "id": "1740114406983",
+      "name": "ahmed",
+      "email": "ahmed.solimanth57@gmail.com",
+      "password": "119119",
+      "role": "customer"
+    },
+    {
+      "id": "1740308584291",
+      "name": "alaa ezzat",
+      "email": "alaaEzzat@gmail.com",
+      "password": "119119***",
+      "role": "customer"
+    }
+  ],
+  "products": [
+    {
+      "id": "1",
+      "model": "Model 1",
+      "year": 2020,
+      "color": "red",
+      "image": "image_url_1",
+      "ownerId": 2
+    },
+    {
+      "id": "2",
+      "model": "Model 2",
+      "year": 2021,
+      "color": "blue",
+      "image": "image_url_2",
+      "ownerId": 2
+    },
+    {
+      "id": "d9da",
+      "image": "https://static1.hotcarsimages.com/wordpress/wp-content/uploads/2020/12/abandoned-supra-e1607948988652.jpg",
+      "year": 2019,
+      "model": "Ford",
+      "color": "blue",
+      "price": 488888888888,
+      "negotiate": true,
+      "ownerId": "2"
+    },
+    {
+      "id": "61cf",
+      "image": "",
+      "year": 2019,
+      "model": "Mercedes",
+      "color": "white",
+      "price": 488888888888,
+      "negotiate": false,
+      "ownerId": "2"
+    },
+    {
+      "id": "a63c",
+      "image": "https://static1.hotcarsimages.com/wordpress/wp-content/uploads/2020/12/abandoned-supra-e1607948988652.jpg",
+      "year": 2018,
+      "model": "BMW",
+      "color": "red",
+      "price": 488888888888,
+      "negotiate": false,
+      "ownerId": "2"
+    }
+  ]
+}

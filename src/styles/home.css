@@ -11,7 +11,7 @@ align-items: center;
 padding: 15px;
 background-attachment: fixed;
 }
-.description > button{
+.description > .button{
     background-color: goldenrod;
     border: none;
 }

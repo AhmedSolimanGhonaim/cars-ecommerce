@@ -9,4 +9,11 @@
   -o-transition: all 3s ease;
   transition: all 3s ease;
 }
-  
+  .notfound{
+    height: 90vh;
+    background-image: url("https://th.bing.com/th/id/R.564df346797f8696fe0cfe5cc8b18fd3?rik=%2ft99k7TE4x4MYw&riu=http%3a%2f%2fc1.staticflickr.com%2f9%2f8536%2f8628588278_9126a2db96.jpg&ehk=fDyK9qRVMk4RWS81T88ckC0qkvO9b9huSClF0tCnfBg%3d&risl=&pid=ImgRaw&r=0");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+   
+  }

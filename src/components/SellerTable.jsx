@@ -5,18 +5,45 @@ import { motion } from "framer-motion";
 import { FaEdit } from "react-icons/fa";
 import { IoTelescope } from "react-icons/io5";
 import { MdDeleteForever } from "react-icons/md";
+import { useSelector, useDispatch } from "react-redux";
+import { deleteProduct, updateProduct } from "../store";
+import { deleteProductAPI, editProduct } from "../api/carsapi";
+export function SellerTable() {
+  const sellerList = useSelector((state) => state.products);
+  const dispatch = useDispatch();
 
-export function SellerTable({ sellerList, setSellerList }) {
-  const handleDelete = (indexToDelete) => {
-    const updatedList = sellerList.filter(
-      (_, index) => index !== indexToDelete
-    );
-    setSellerList(updatedList);
+  const handleDelete = async (productId) => {
+    try {
+      await deleteProductAPI(productId);
+      dispatch(deleteProduct(productId));
+      const updatedProducts = sellerList.filter(
+        (product) => product.id !== productId
+      );
+      sessionStorage.setItem("products", JSON.stringify(updatedProducts));
+    } catch (error) {
+      console.error("Error deleting product:", error);
+    }
+  };
+
+  const handleEdit = async (product) => {
+    try {
+      // For demo purposes, you might open a modal or inline edit.
+      // Here, we simply send the same product back to update.
+      const response = await editProduct(product.id, product);
+      const updatedProduct = response.data;
+      dispatch(updateProduct(updatedProduct));
+      const updatedProducts = sellerList.map((p) =>
+        p.id === updatedProduct.id ? updatedProduct : p
+      );
+      sessionStorage.setItem("products", JSON.stringify(updatedProducts));
+    } catch (error) {
+      console.error("Error editing product:", error);
+    }
   };
 
   const AnimatedText = ({ text }) => {
     return (
-      <h2 className="bg-info p-2 ">
+      <h2 className="bg-info p-2">
         {text.split("").map((char, index) => (
           <motion.span
             key={index}
@@ -34,7 +61,6 @@ export function SellerTable({ sellerList, setSellerList }) {
   return (
     <div className="seller-table-container">
       <div className="mt-5 container my-5 d-flex justify-content-between">
-        <button className="btn btn-primary">Add Product</button>
         <input
           type="text"
           className="w-25 form-control"
@@ -52,23 +78,26 @@ export function SellerTable({ sellerList, setSellerList }) {
                 <th>#</th>
                 <th>Owner</th>
                 <th>Car Model</th>
-                <th>FILES</th>
+                <th>Image</th>
                 <th>Year</th>
                 <th>Color</th>
-                <th>negotiable</th>
+                <th>Negotiable</th>
                 <th>Price</th>
                 <th colSpan={3}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {sellerList.map((seller, index) => (
-                <tr key={index}>
-                  <td>{index}</td>
-                  <td>{seller.sellerId}</td>
+                <tr key={seller.id}>
+                  <td>{index + 1}</td>
+                  <td>{seller.ownerId}</td>
                   <td>{seller.model}</td>
                   <td>
-                    <a href="#!" className="text-decoration-none text-light">
-                      {seller.file}
+                    <a
+                      href={seller.image}
+                      className="text-decoration-none text-light"
+                    >
+                      {seller.image}
                     </a>
                   </td>
                   <td>{seller.year}</td>
@@ -88,7 +117,7 @@ export function SellerTable({ sellerList, setSellerList }) {
                   <td>
                     {seller.negotiate && (
                       <Badge bg="success" className="p-2 fs-6">
-                        negotiable
+                        Negotiable
                       </Badge>
                     )}
                   </td>
@@ -96,13 +125,16 @@ export function SellerTable({ sellerList, setSellerList }) {
                   <td>
                     <button
                       className="btn btn-outline-danger btn-sm"
-                      onClick={() => handleDelete(index)}
+                      onClick={() => handleDelete(seller.id)}
                     >
                       <MdDeleteForever />
                     </button>
                   </td>
                   <td>
-                    <button className="btn btn-outline-success btn-sm">
+                    <button
+                      className="btn btn-outline-success btn-sm"
+                      onClick={() => handleEdit(seller)}
+                    >
                       <FaEdit />
                     </button>
                   </td>

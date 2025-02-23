@@ -1,15 +1,18 @@
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Button, Form } from "react-bootstrap";
+import { addProduct } from "../store";
+import { addNewProduct } from "../api/carsapi"; // Use the API helper
+import axios from "axios";
 
 function validateForm(values) {
   const errors = {};
-
   if (!values.sellerId.trim()) {
     errors.sellerId = "Owner ID is required";
   }
   if (!values.price) {
     errors.price = "Price is required";
-  } else if (values.price <= 0) {
+  } else if (Number(values.price) <= 0) {
     errors.price = "Price must be greater than 0";
   }
   if (!values.year) {
@@ -21,14 +24,16 @@ function validateForm(values) {
   if (!values.color || values.color === "color") {
     errors.color = "Car Color is required";
   }
-
   return errors;
 }
 
-export function SellerForm({ sellerList, setSellerList }) {
+export function SellerForm() {
+  const dispatch = useDispatch();
+  const products = useSelector((state) => state.products);
+
   const [formValues, setFormValues] = useState({
     sellerId: "",
-    file: "",
+    image: "",
     year: "",
     model: "",
     color: "",
@@ -36,7 +41,6 @@ export function SellerForm({ sellerList, setSellerList }) {
     negotiate: false,
   });
 
-  // 1. Add error state
   const [errors, setErrors] = useState({});
 
   const inputHandler = (event) => {
@@ -47,34 +51,50 @@ export function SellerForm({ sellerList, setSellerList }) {
     });
   };
 
-  const AddProduct = (event) => {
+  const handleAddProduct = async (event) => {
     event.preventDefault();
-
-    // 2. Validate form
     const validationErrors = validateForm(formValues);
     setErrors(validationErrors);
 
-    // 3. If no errors, proceed with adding product
     if (Object.keys(validationErrors).length === 0) {
-      setSellerList([...sellerList, formValues]);
+      try {
+        // Prepare product data by converting sellerId to ownerId and parsing numbers
+        const productData = {
+          ...formValues,
+          ownerId: formValues.sellerId,
+          year: Number(formValues.year),
+          price: Number(formValues.price),
+        };
+        // Remove sellerId property since we've mapped it to ownerId
+        delete productData.sellerId;
 
-      // Reset form
-      setFormValues({
-        sellerId: "",
-        file: "",
-        year: "",
-        model: "",
-        color: "",
-        price: "",
-        negotiate: false,
-      });
+        const response = await addNewProduct(productData);
+        const newProduct = response.data;
+
+        dispatch(addProduct(newProduct));
+        const updatedProducts = [...products, newProduct];
+        sessionStorage.setItem("products", JSON.stringify(updatedProducts));
+
+        // Reset form
+        setFormValues({
+          sellerId: "",
+          image: "",
+          year: "",
+          model: "",
+          color: "",
+          price: "",
+          negotiate: false,
+        });
+      } catch (error) {
+        console.error("Error adding product:", error);
+      }
     }
   };
 
   return (
     <div className="seller-form-container bg-white p-3 rounded">
       <h2 className="mb-3 text-center">Add Car</h2>
-      <Form onSubmit={AddProduct}>
+      <Form onSubmit={handleAddProduct}>
         <Form.Group className="mb-3" controlId="formBasicOwner">
           <Form.Label>Owner ID</Form.Label>
           <Form.Control
@@ -82,8 +102,8 @@ export function SellerForm({ sellerList, setSellerList }) {
             type="text"
             name="sellerId"
             onChange={inputHandler}
-            placeholder="Enter ID"
-            isInvalid={!!errors.sellerId} /* Highlight if there's an error */
+            placeholder="Enter Owner ID"
+            isInvalid={!!errors.sellerId}
           />
           {errors.sellerId && (
             <Form.Control.Feedback type="invalid">
@@ -109,18 +129,12 @@ export function SellerForm({ sellerList, setSellerList }) {
           )}
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicFile">
-          <Form.Label>Ownership Files</Form.Label>
-          <Form.Control
-            onChange={inputHandler}
-            value={formValues.file}
-            name="file"
-            type="file"
-          />
-          {/* File validation is optional; if you want to do it, you can add checks in validateForm */}
+        <Form.Group className="mb-3" controlId="formBasicimage">
+          <Form.Label>Ownership images</Form.Label>
+          <Form.Control onChange={inputHandler} name="image" type="text" />
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formBasicCarModel">
+        <Form.Group className="mb-3" controlId="formBasicCarYear">
           <Form.Label>Car Year</Form.Label>
           <Form.Select
             onChange={inputHandler}
@@ -175,7 +189,7 @@ export function SellerForm({ sellerList, setSellerList }) {
             name="color"
             isInvalid={!!errors.color}
           >
-            <option value="color">Select Color</option>
+            <option value="">Select Color</option>
             <option value="red">Red</option>
             <option value="blue">Blue</option>
             <option value="black">Black</option>
@@ -189,7 +203,7 @@ export function SellerForm({ sellerList, setSellerList }) {
           )}
         </Form.Group>
 
-        <Form.Group className="mb-3" controlId="formSelectCarModel">
+        <Form.Group className="mb-3" controlId="formNegotiable">
           <Form.Check
             onChange={inputHandler}
             name="negotiate"
